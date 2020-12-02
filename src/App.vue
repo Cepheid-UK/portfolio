@@ -1,60 +1,56 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
+    <!-- Nav Bar -->
+    <v-app-bar app>
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        class="nav-button"
+        v-for="item in items"
+        :key="item.name"
+        :to="item.path">{{ item.name}}
       </v-btn>
+      
+      <v-spacer></v-spacer>
+      
+      <!-- Theme selection -->
+      <v-btn text tile v-on="switchTheme">
+        <v-icon>mdi-theme-light-dark</v-icon>
+      </v-btn>
+       
     </v-app-bar>
 
+    <!-- Main content -->
     <v-main>
-      <HelloWorld/>
+      <router-view :key="$router.fullPath"></router-view>
     </v-main>
+
   </v-app>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld';
+<script lang="ts">
+import Vue from "vue"
+import { Component } from "vue-property-decorator"
+import Home from "@/views/Home.vue"
+import About from "@/views/About.vue"
 
-export default {
-  name: 'App',
+@Component({})
+export default class App extends Vue {
 
-  components: {
-    HelloWorld,
+private items = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
   },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  }
+];
 
-  data: () => ({
-    //
-  }),
-};
+  switchTheme() {
+    this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+  }
+}
 </script>
