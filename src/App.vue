@@ -1,9 +1,11 @@
 <template>
-  <v-app>
+  <v-app :dark="dark">
 
     <!-- Nav Bar -->
-    <v-app-bar app>
+    <v-app-bar app :class="{ darkmode: dark }">
       <v-btn
+        text
+        tile
         class="nav-button"
         v-for="item in items"
         :key="item.name"
@@ -13,7 +15,7 @@
       <v-spacer></v-spacer>
       
       <!-- Theme selection -->
-      <v-btn text tile v-on="switchTheme">
+      <v-btn text tile @click="switchDark">
         <v-icon>mdi-theme-light-dark</v-icon>
       </v-btn>
        
@@ -36,21 +38,33 @@ import About from "@/views/About.vue"
 @Component({})
 export default class App extends Vue {
 
-private items = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: About
-  }
-];
+  private darkTheme = false;
 
-  switchTheme() {
-    this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+  private items = [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About
+    }
+  ];
+
+  get dark() : boolean {
+    return this.darkTheme;
+  }
+
+  set dark(val : boolean) {
+    this.darkTheme = val;
+    this.$vuetify.theme.dark = val;
+  }
+
+  switchDark() : void {
+    this.darkTheme = !this.darkTheme
+    this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
   }
 }
 </script>
